@@ -8,14 +8,21 @@ export { commentsApi } from './comments'
 export { categoriesApi, tagsApi } from './categories'
 export { usersApi } from './users'
 
+// Import for combined API object
+import { authApi } from './auth'
+import { postsApi } from './posts'
+import { commentsApi } from './comments'
+import { categoriesApi, tagsApi } from './categories'
+import { usersApi } from './users'
+
 // Combined API object for convenience
 export const api = {
-  auth: require('./auth').authApi,
-  posts: require('./posts').postsApi,
-  comments: require('./comments').commentsApi,
-  categories: require('./categories').categoriesApi,
-  tags: require('./categories').tagsApi,
-  users: require('./users').usersApi,
+  auth: authApi,
+  posts: postsApi,
+  comments: commentsApi,
+  categories: categoriesApi,
+  tags: tagsApi,
+  users: usersApi,
 }
 
 // Export types for external use

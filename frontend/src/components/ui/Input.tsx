@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { motion, HTMLMotionProps } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 export interface InputProps
@@ -44,7 +44,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
       >
-        <motion.input
+        <input
           type={type}
           className={cn(
             'flex w-full transition-all duration-300 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-muted-foreground',

@@ -33,10 +33,11 @@ const badgeVariants = cva(
   }
 )
 
-interface BadgeProps extends Omit<HTMLMotionProps<'div'>, 'size'>, VariantProps<typeof badgeVariants> {
+interface BadgeProps extends Omit<HTMLMotionProps<'div'>, 'size' | 'children'>, VariantProps<typeof badgeVariants> {
   animated?: boolean
   pulse?: boolean
   icon?: React.ReactNode
+  children?: React.ReactNode
 }
 
 const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(

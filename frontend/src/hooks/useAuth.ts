@@ -7,7 +7,6 @@ import type {
   LoginRequest,
   RegisterRequest,
   UpdateUserRequest,
-  AuthResponse,
 } from '@/types/api'
 
 export const useAuth = () => {

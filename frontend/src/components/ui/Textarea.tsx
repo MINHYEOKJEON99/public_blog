@@ -44,7 +44,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
       >
-        <motion.textarea
+        <textarea
           className={cn(
             'flex w-full resize-none transition-all duration-300 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-muted-foreground',
             'focus-visible:ring-2 focus-visible:ring-blue-500/20 focus-visible:border-blue-500 dark:focus-visible:border-blue-400',

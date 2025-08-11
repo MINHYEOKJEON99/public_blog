@@ -1,9 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff, Mail, Lock, LogIn } from 'lucide-react'
@@ -18,12 +17,11 @@ import { cn } from '@/lib/utils'
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const { login, isLoggingIn } = useAuth()
-  const router = useRouter()
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {

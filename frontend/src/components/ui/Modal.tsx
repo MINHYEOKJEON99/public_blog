@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -90,14 +90,11 @@ const ModalHeader = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <motion.div
+  <div
     className={cn(
       'flex flex-col space-y-2 text-center sm:text-left pb-4 border-b border-gray-200 dark:border-gray-700',
       className
     )}
-    initial={{ opacity: 0, y: -20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: 0.1, duration: 0.3 }}
     {...props}
   />
 )

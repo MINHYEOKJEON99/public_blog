@@ -2,14 +2,15 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Layout } from '@/components/common/Layout'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select'
 import { 
-  Search, Filter, Grid, List, Clock, Heart, MessageCircle, Eye, 
-  ArrowRight, TrendingUp, Calendar, User, Tag, SortAsc, SortDesc
+  Search, Grid, List, Clock, Heart, MessageCircle, Eye, 
+  ArrowRight, TrendingUp
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -186,7 +187,7 @@ export default function PostsPage() {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [sortBy, setSortBy] = useState('latest')
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
-  const [showFilters, setShowFilters] = useState(false)
+  // const [showFilters, setShowFilters] = useState(false) // TODO: Implement filters UI
 
   const filteredPosts = mockPosts.filter(post => {
     const matchesSearch = !searchQuery || 
@@ -335,9 +336,11 @@ export default function PostsPage() {
               <Link key={post.id} href={`/posts/${post.slug}`}>
                 <Card className="group cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border-0 shadow-lg bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm overflow-hidden rounded-2xl h-full">
                   <div className="aspect-video overflow-hidden">
-                    <img
+                    <Image
                       src={post.coverImage}
                       alt={post.title}
+                      width={800}
+                      height={400}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
@@ -362,9 +365,11 @@ export default function PostsPage() {
                     
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <img
+                        <Image
                           src={post.author.avatar}
                           alt={post.author.name}
+                          width={32}
+                          height={32}
                           className="w-8 h-8 rounded-full ring-2 ring-white dark:ring-gray-700"
                         />
                         <div>
@@ -404,9 +409,11 @@ export default function PostsPage() {
                 <Card className="group cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border-0 shadow-lg bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm overflow-hidden rounded-2xl">
                   <div className="flex flex-col md:flex-row">
                     <div className="md:w-80 aspect-video md:aspect-auto overflow-hidden">
-                      <img
+                      <Image
                         src={post.coverImage}
                         alt={post.title}
+                        width={320}
+                        height={200}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     </div>
@@ -431,9 +438,11 @@ export default function PostsPage() {
                       
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <img
+                          <Image
                             src={post.author.avatar}
                             alt={post.author.name}
+                            width={40}
+                            height={40}
                             className="w-10 h-10 rounded-full ring-2 ring-white dark:ring-gray-700"
                           />
                           <div>

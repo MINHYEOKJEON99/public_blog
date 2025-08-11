@@ -1,7 +1,7 @@
 import apiClient from './client'
 import type {
   User,
-  PostSummary,
+  Post,
   ApiResponse,
   PaginatedResponse,
   BaseQueryParams,
@@ -35,7 +35,7 @@ export const usersApi = {
   async getUserPosts(
     username: string,
     params?: BaseQueryParams & { published?: boolean }
-  ): Promise<ApiResponse<PaginatedResponse<PostSummary>>> {
+  ): Promise<ApiResponse<PaginatedResponse<Post>>> {
     const queryParams = new URLSearchParams()
     
     if (params) {

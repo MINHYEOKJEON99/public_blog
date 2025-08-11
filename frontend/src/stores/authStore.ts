@@ -42,7 +42,7 @@ const initialState: AuthState = {
 
 export const useAuthStore = create<AuthStore>()(
   persist(
-    (set, get) => ({
+    (set, _get) => ({
       ...initialState,
       
       login: (user, token, refreshToken) =>

@@ -5,18 +5,20 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Layout } from '@/components/common/Layout'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Card, CardDescription, CardTitle } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar'
 import { Progress } from '@/components/ui/Progress'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs'
 import { QuickTooltip } from '@/components/ui/Tooltip'
 import Link from 'next/link'
+import Image from 'next/image'
+import { cn } from '@/lib/utils'
 import { 
   Search, TrendingUp, Clock, Heart, MessageCircle, Eye, ArrowRight, BookOpen, 
-  Users, Zap, Star, Code, Palette, Database, Globe, Rocket, Award, ChevronRight,
-  PlayCircle, Download, Share2, Bookmark, Filter, SortDesc, Grid3X3, List,
-  Sparkles, Trophy, Target, Lightbulb, Coffee, Mic2
+  Users, Star, Code, Palette, Database, Globe, Rocket, Award, ChevronRight,
+  PlayCircle, Download, Share2, Bookmark, Grid3X3, List,
+  Sparkles, Trophy, Target, Lightbulb, Coffee
 } from 'lucide-react'
 
 // Mock data - Enhanced with more realistic content
@@ -141,10 +143,10 @@ const mockCategories = [
 ]
 
 const statsData = [
-  { label: '활성 사용자', value: '12,547', icon: Users, color: 'from-blue-500 to-cyan-500' },
-  { label: '총 포스트', value: '2,847', icon: BookOpen, color: 'from-green-500 to-emerald-500' },
-  { label: '월간 조회수', value: '187K', icon: Eye, color: 'from-purple-500 to-pink-500' },
-  { label: '커뮤니티 점수', value: '96%', icon: Trophy, color: 'from-yellow-500 to-orange-500' }
+  { label: '활성 사용자', value: '12,547', displayValue: '12,547', icon: Users, color: 'from-blue-500 to-cyan-500' },
+  { label: '총 포스트', value: '2,847', displayValue: '2,847', icon: BookOpen, color: 'from-green-500 to-emerald-500' },
+  { label: '월간 조회수', value: '187K', displayValue: '187K', icon: Eye, color: 'from-purple-500 to-pink-500' },
+  { label: '커뮤니티 점수', value: '96%', displayValue: '96%', icon: Trophy, color: 'from-yellow-500 to-orange-500' }
 ]
 
 function formatDate(dateString: string) {
@@ -459,9 +461,11 @@ export default function Home() {
                       viewMode === 'list' ? "w-80 flex-shrink-0" : "",
                       index === 0 && viewMode === 'grid' ? "aspect-[2/1]" : "aspect-video"
                     )}>
-                      <img
+                      <Image
                         src={post.coverImage}
                         alt={post.title}
+                        width={800}
+                        height={400}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                       

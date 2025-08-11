@@ -2,19 +2,16 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
+import { useParams } from 'next/navigation'
 import { notFound } from 'next/navigation'
 import { Layout } from '@/components/common/Layout'
 import { Button } from '@/components/ui/Button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
-import { Input } from '@/components/ui/Input'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Textarea } from '@/components/ui/Textarea'
 import { 
   Heart, MessageCircle, Eye, Share2, Clock, Calendar,
-  User, Tag, ArrowLeft, ArrowUp, Bookmark, ChevronDown,
-  Facebook, Twitter, LinkIcon, ThumbsUp, Reply, MoreHorizontal
+  User, ArrowUp, Bookmark, ThumbsUp, Reply, MoreHorizontal
 } from 'lucide-react'
-import { formatDate } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 
 // Mock data - 실제로는 API에서 가져올 데이터
@@ -172,15 +169,13 @@ const mockRelatedPosts = [
   }
 ]
 
-interface PostPageProps {
-  params: { slug: string }
-}
-
-export default function PostPage({ params }: PostPageProps) {
+export default function PostPage() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _params = useParams<{ slug: string }>()
   const [isLiked, setIsLiked] = useState(mockPost.isLiked)
   const [likesCount, setLikesCount] = useState(mockPost.likesCount)
   const [commentText, setCommentText] = useState('')
-  const [showScrollTop, setShowScrollTop] = useState(false)
+  // const [showScrollTop, setShowScrollTop] = useState(false) // TODO: Implement scroll to top functionality
 
   // Mock post fetching - 실제로는 API 호출
   const post = mockPost

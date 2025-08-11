@@ -16,12 +16,12 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       animate: { 
         opacity: 1, 
         y: 0,
-        transition: { duration: 0.3, ease: "easeOut" }
+        transition: { duration: 0.3, ease: "easeOut" as const }
       },
       hover: hoverable ? {
         y: -8,
         scale: 1.02,
-        transition: { type: "spring", stiffness: 300, damping: 20 }
+        transition: { type: "spring" as const, stiffness: 300, damping: 20 }
       } : {},
     }
 

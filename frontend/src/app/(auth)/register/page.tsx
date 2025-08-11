@@ -34,6 +34,7 @@ export default function RegisterPage() {
   })
 
   const onSubmit = (data: RegisterFormData) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { confirmPassword, ...registerData } = data
     registerUser(registerData)
   }

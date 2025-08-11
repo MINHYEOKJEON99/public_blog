@@ -40,24 +40,23 @@ const buttonVariants = cva(
   }
 )
 
-interface ButtonProps extends Omit<HTMLMotionProps<"button">, "size">, VariantProps<typeof buttonVariants> {
+interface ButtonProps extends Omit<HTMLMotionProps<"button">, "size" | "children">, VariantProps<typeof buttonVariants> {
   asChild?: boolean
+  children?: React.ReactNode
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, children, ...props }, ref) => {
-    const Comp = asChild ? Slot : motion.button
-
     const buttonAnimation = {
       whileHover: { 
         scale: 1.02,
         y: -2,
-        transition: { type: "spring", stiffness: 400, damping: 10 }
+        transition: { type: "spring" as const, stiffness: 400, damping: 10 }
       },
       whileTap: { 
         scale: 0.98,
         y: 0,
-        transition: { type: "spring", stiffness: 400, damping: 10 }
+        transition: { type: "spring" as const, stiffness: 400, damping: 10 }
       },
     }
 
@@ -70,7 +69,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     return (
-      <Comp
+      <motion.button
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...buttonAnimation}
@@ -85,7 +84,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         <span className="relative z-10 flex items-center justify-center gap-2">
           {children}
         </span>
-      </Comp>
+      </motion.button>
     )
   }
 )

@@ -1,7 +1,6 @@
 import apiClient from './client'
 import type {
   Post,
-  PostSummary,
   CreatePostRequest,
   UpdatePostRequest,
   PostFilters,
@@ -12,7 +11,7 @@ import type {
 
 export const postsApi = {
   // Posts CRUD
-  async getPosts(filters?: PostFilters): Promise<ApiResponse<PaginatedResponse<PostSummary>>> {
+  async getPosts(filters?: PostFilters): Promise<ApiResponse<PaginatedResponse<Post>>> {
     const params = new URLSearchParams()
     
     if (filters) {
@@ -59,7 +58,7 @@ export const postsApi = {
   },
 
   // My posts (for authenticated users)
-  async getMyPosts(filters?: Omit<PostFilters, 'author'>): Promise<ApiResponse<PaginatedResponse<PostSummary>>> {
+  async getMyPosts(filters?: Omit<PostFilters, 'author'>): Promise<ApiResponse<PaginatedResponse<Post>>> {
     const params = new URLSearchParams()
     
     if (filters) {
@@ -76,7 +75,7 @@ export const postsApi = {
     return apiClient.get(url)
   },
 
-  async getDraftPosts(): Promise<ApiResponse<PaginatedResponse<PostSummary>>> {
+  async getDraftPosts(): Promise<ApiResponse<PaginatedResponse<Post>>> {
     return apiClient.get('/posts/me?published=false')
   },
 
@@ -106,7 +105,7 @@ export const postsApi = {
   async searchPosts(
     query: string,
     filters?: Omit<PostFilters, 'search'>
-  ): Promise<ApiResponse<PaginatedResponse<PostSummary>>> {
+  ): Promise<ApiResponse<PaginatedResponse<Post>>> {
     const params = new URLSearchParams({ search: query })
     
     if (filters) {
@@ -121,18 +120,18 @@ export const postsApi = {
   },
 
   // Related posts
-  async getRelatedPosts(id: string): Promise<ApiResponse<PostSummary[]>> {
+  async getRelatedPosts(id: string): Promise<ApiResponse<Post[]>> {
     return apiClient.get(`/posts/${id}/related`)
   },
 
   // Popular posts
-  async getPopularPosts(limit?: number): Promise<ApiResponse<PostSummary[]>> {
+  async getPopularPosts(limit?: number): Promise<ApiResponse<Post[]>> {
     const params = limit ? `?limit=${limit}` : ''
     return apiClient.get(`/posts/popular${params}`)
   },
 
   // Recent posts
-  async getRecentPosts(limit?: number): Promise<ApiResponse<PostSummary[]>> {
+  async getRecentPosts(limit?: number): Promise<ApiResponse<Post[]>> {
     const params = limit ? `?limit=${limit}` : ''
     return apiClient.get(`/posts/recent${params}`)
   },

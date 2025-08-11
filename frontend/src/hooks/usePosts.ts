@@ -10,8 +10,6 @@ import type {
   PostFilters,
   CreatePostRequest,
   UpdatePostRequest,
-  Post,
-  PostSummary,
 } from '@/types/api'
 
 // Posts list query
@@ -137,7 +135,7 @@ export const usePostMutations = () => {
   const updatePostMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdatePostRequest }) =>
       postsApi.updatePost(id, data),
-    onSuccess: ({ data }, variables) => {
+    onSuccess: ({ data }) => {
       queryClient.invalidateQueries({ queryKey: ['posts'] })
       queryClient.invalidateQueries({ queryKey: ['post', data?.slug] })
       addToast({
@@ -178,7 +176,7 @@ export const usePostMutations = () => {
   // Like post
   const likePostMutation = useMutation({
     mutationFn: (id: string) => postsApi.likePost(id),
-    onSuccess: (_, postId) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] })
       queryClient.invalidateQueries({ queryKey: ['post'] })
     },

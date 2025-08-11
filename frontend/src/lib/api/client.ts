@@ -1,7 +1,7 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import { useAuthStore } from '@/stores/authStore'
 import { useUIStore } from '@/stores/uiStore'
-import type { ApiResponse, ApiError } from '@/types/api'
+import type { ApiResponse } from '@/types/api'
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'
 
