@@ -3,12 +3,15 @@
 ## 🎯 프로젝트 개요
 
 ### 프로젝트명
+
 Public Blog - 모던 블로그 플랫폼
 
 ### 목표
+
 사용자 친화적이고 성능이 우수한 블로그 플랫폼 구축
 
 ### 주요 특징
+
 - 반응형 디자인
 - 다크 모드 지원
 - SEO 최적화
@@ -61,7 +64,8 @@ Public Blog - 모던 블로그 플랫폼
 ## 💻 기술 스택
 
 ### Frontend
-- **Framework**: Next.js 14+ (App Router)
+
+- **Framework**: Next.js 15+ (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **State Management**: Zustand
@@ -74,6 +78,7 @@ Public Blog - 모던 블로그 플랫폼
 - **Animation**: Framer Motion
 
 ### Backend
+
 - **Runtime**: Node.js
 - **Framework**: Express.js
 - **Language**: TypeScript
@@ -87,6 +92,7 @@ Public Blog - 모던 블로그 플랫폼
 - **API Documentation**: Swagger
 
 ### DevOps & Tools
+
 - **Version Control**: Git
 - **Package Manager**: pnpm
 - **Linting**: ESLint
@@ -100,6 +106,7 @@ Public Blog - 모던 블로그 플랫폼
 ## 📁 프로젝트 구조
 
 ### Frontend 구조
+
 ```
 public_blog/
 ├── frontend/
@@ -166,6 +173,7 @@ public_blog/
 ```
 
 ### Backend 구조
+
 ```
 ├── backend/
 │   ├── src/
@@ -279,6 +287,7 @@ model Comment {
 ## 🔌 API 엔드포인트
 
 ### Authentication
+
 - `POST /api/auth/register` - 회원가입
 - `POST /api/auth/login` - 로그인
 - `POST /api/auth/logout` - 로그아웃
@@ -286,6 +295,7 @@ model Comment {
 - `GET /api/auth/me` - 현재 사용자 정보
 
 ### Posts
+
 - `GET /api/posts` - 포스트 목록
 - `GET /api/posts/:slug` - 포스트 상세
 - `POST /api/posts` - 포스트 생성
@@ -295,17 +305,20 @@ model Comment {
 - `DELETE /api/posts/:id/like` - 좋아요 취소
 
 ### Comments
+
 - `GET /api/posts/:postId/comments` - 댓글 목록
 - `POST /api/posts/:postId/comments` - 댓글 작성
 - `PUT /api/comments/:id` - 댓글 수정
 - `DELETE /api/comments/:id` - 댓글 삭제
 
 ### Categories & Tags
+
 - `GET /api/categories` - 카테고리 목록
 - `GET /api/tags` - 태그 목록
 - `GET /api/tags/popular` - 인기 태그
 
 ### Users
+
 - `GET /api/users/:username` - 사용자 프로필
 - `PUT /api/users/profile` - 프로필 수정
 - `POST /api/users/avatar` - 아바타 업로드
@@ -313,12 +326,14 @@ model Comment {
 ## 🎨 주요 기능
 
 ### 1. 인증 시스템
+
 - JWT + Refresh Token 기반 인증
 - 소셜 로그인 (Google, GitHub)
 - 이메일 인증
 - 비밀번호 재설정
 
 ### 2. 포스트 관리
+
 - 마크다운 에디터
 - 이미지 업로드 (드래그 앤 드롭)
 - 자동 저장
@@ -327,23 +342,27 @@ model Comment {
 - SEO 메타데이터 설정
 
 ### 3. 댓글 시스템
+
 - 실시간 댓글 (Socket.io)
 - 대댓글 지원
 - 댓글 알림
 - 스팸 필터링
 
 ### 4. 검색 & 필터
+
 - 전문 검색
 - 카테고리/태그 필터
 - 정렬 옵션 (최신, 인기, 조회수)
 
 ### 5. 사용자 대시보드
+
 - 통계 대시보드
 - 포스트 관리
 - 댓글 관리
 - 프로필 설정
 
 ### 6. 성능 최적화
+
 - 이미지 최적화 (Next.js Image)
 - 무한 스크롤
 - 페이지네이션
@@ -353,12 +372,14 @@ model Comment {
 ## 🚀 개발 로드맵
 
 ### Phase 1: 기초 설정 (1주)
+
 - [x] 프로젝트 초기 설정
 - [ ] 개발 환경 구성
 - [ ] 데이터베이스 설계
 - [ ] API 스펙 정의
 
 ### Phase 2: 백엔드 개발 (2주)
+
 - [ ] Express 서버 설정
 - [ ] Prisma 설정 및 마이그레이션
 - [ ] 인증 시스템 구현
@@ -366,6 +387,7 @@ model Comment {
 - [ ] 파일 업로드 구현
 
 ### Phase 3: 프론트엔드 개발 (3주)
+
 - [ ] Next.js 프로젝트 설정
 - [ ] 공통 컴포넌트 개발
 - [ ] 인증 페이지 구현
@@ -374,6 +396,7 @@ model Comment {
 - [ ] 대시보드 구현
 
 ### Phase 4: 통합 및 최적화 (1주)
+
 - [ ] API 연동
 - [ ] 상태 관리 구현
 - [ ] 실시간 기능 구현
@@ -381,6 +404,7 @@ model Comment {
 - [ ] 반응형 디자인 완성
 
 ### Phase 5: 테스트 및 배포 (1주)
+
 - [ ] 단위 테스트 작성
 - [ ] E2E 테스트
 - [ ] 보안 점검
@@ -400,7 +424,7 @@ model Comment {
 
 ## 📈 성능 목표
 
-- Lighthouse 점수 90+ 
+- Lighthouse 점수 90+
 - First Contentful Paint < 1.5s
 - Time to Interactive < 3.5s
 - 이미지 Lazy Loading
@@ -418,6 +442,7 @@ model Comment {
 ## 📝 개발 규칙
 
 ### 코드 스타일
+
 - ESLint + Prettier 설정 준수
 - TypeScript strict mode
 - 함수형 컴포넌트 사용
@@ -425,12 +450,14 @@ model Comment {
 - 절대 경로 import
 
 ### Git 컨벤션
+
 - Conventional Commits
 - Feature Branch 전략
 - PR Template 사용
 - Code Review 필수
 
 ### 명명 규칙
+
 - 컴포넌트: PascalCase
 - 함수/변수: camelCase
 - 상수: UPPER_SNAKE_CASE
@@ -454,4 +481,4 @@ model Comment {
 
 ---
 
-*이 문서는 프로젝트 진행에 따라 지속적으로 업데이트됩니다.*
+_이 문서는 프로젝트 진행에 따라 지속적으로 업데이트됩니다._
