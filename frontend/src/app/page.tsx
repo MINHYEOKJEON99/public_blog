@@ -1,10 +1,11 @@
 'use client'
 
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { Layout } from '@/components/common/Layout'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, AnimatedCard } from '@/components/ui/Card'
 import Link from 'next/link'
 import { Search, TrendingUp, Clock, Heart, MessageCircle, Eye, ArrowRight, BookOpen, Users, Zap } from 'lucide-react'
 
@@ -116,48 +117,137 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative py-24 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-transparent to-purple-50/30 dark:from-blue-900/10 dark:to-purple-900/10" />
+        
+        {/* Animated background elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div
+            className="absolute top-20 left-10 w-20 h-20 bg-blue-500/10 rounded-full"
+            animate={{ y: [-10, 10, -10], rotate: [0, 180, 360] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute bottom-20 right-10 w-16 h-16 bg-purple-500/10 rounded-full"
+            animate={{ y: [10, -10, 10], x: [-5, 5, -5] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute top-1/2 left-1/4 w-12 h-12 bg-pink-500/10 rounded-full"
+            animate={{ scale: [1, 1.2, 1], rotate: [-10, 10, -10] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
+        
         <div className="relative container mx-auto text-center max-w-5xl">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100/80 dark:bg-blue-900/30 rounded-full text-blue-700 dark:text-blue-300 text-sm font-medium mb-6">
-            <Zap className="h-4 w-4" />
+          <motion.div 
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100/80 dark:bg-blue-900/30 rounded-full text-blue-700 dark:text-blue-300 text-sm font-medium mb-6"
+            initial={{ opacity: 0, y: -20, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
+            <motion.div
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            >
+              <Zap className="h-4 w-4" />
+            </motion.div>
             개발자를 위한 지식 공유 플랫폼
-          </div>
+          </motion.div>
           
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-            함께 성장하는
+          <motion.h1 
+            className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <motion.span 
+              className="inline-block"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              함께 성장하는
+            </motion.span>
             <br />
-            개발자 커뮤니티
-          </h1>
+            <motion.span 
+              className="inline-block"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              개발자 커뮤니티
+            </motion.span>
+          </motion.h1>
           
-          <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
+          <motion.p 
+            className="text-lg md:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+          >
             최신 기술 트렌드부터 실무 노하우까지, 
             개발자들이 서로의 경험과 지식을 나누며 함께 성장하는 공간입니다.
-          </p>
+          </motion.p>
           
           {/* Search Bar */}
-          <div className="max-w-lg mx-auto mb-10">
+          <motion.div 
+            className="max-w-lg mx-auto mb-10"
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.6, delay: 1.0 }}
+          >
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <motion.div
+                animate={{ x: [0, 2, -2, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 3 }}
+              >
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              </motion.div>
               <Input
                 type="text"
                 placeholder="궁금한 주제를 검색해보세요..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-12 h-14 text-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-0 shadow-xl rounded-2xl"
+                variant="glass"
+                inputSize="lg"
               />
             </div>
-          </div>
+          </motion.div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white h-12 px-8 rounded-xl" asChild>
-              <Link href="/posts">
-                모든 포스트 보기
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button variant="outline" size="lg" className="h-12 px-8 rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-2" asChild>
-              <Link href="/login">지금 시작하기</Link>
-            </Button>
-          </div>
+          <motion.div 
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.2 }}
+          >
+            <motion.div
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              <Button size="lg" variant="gradient" className="h-12 px-8 rounded-xl" asChild>
+                <Link href="/posts">
+                  모든 포스트 보기
+                  <motion.div 
+                    className="ml-2"
+                    animate={{ x: [0, 4, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
+                  >
+                    <ArrowRight className="h-4 w-4" />
+                  </motion.div>
+                </Link>
+              </Button>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              <Button variant="glass" size="lg" className="h-12 px-8 rounded-xl" asChild>
+                <Link href="/login">지금 시작하기</Link>
+              </Button>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
@@ -175,7 +265,20 @@ export default function Home() {
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {mockPosts.map((post, index) => (
-              <Card key={post.id} className={`group cursor-pointer transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border-0 shadow-lg bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm overflow-hidden rounded-2xl ${index === 0 ? 'md:col-span-2 md:row-span-1' : ''}`}>
+              <motion.div
+                key={post.id}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: index * 0.2,
+                  type: "spring",
+                  stiffness: 100
+                }}
+                className={`${index === 0 ? 'md:col-span-2 md:row-span-1' : ''}`}
+                whileHover={{ y: -8, scale: 1.02 }}
+              >
+                <Card className="group cursor-pointer transition-all duration-500 border-0 shadow-lg bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm overflow-hidden rounded-2xl hover:shadow-2xl" hoverable glassy>
                 <div className={`aspect-video overflow-hidden ${index === 0 ? 'md:aspect-[2/1]' : ''}`}>
                   <img
                     src={post.coverImage}
@@ -236,6 +339,7 @@ export default function Home() {
                   </div>
                 </CardContent>
               </Card>
+              </motion.div>
             ))}
           </div>
 
@@ -263,38 +367,73 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="p-8 text-center border-0 shadow-xl bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-900/20 dark:to-blue-800/20 rounded-2xl group hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-              <div className="p-4 bg-blue-600 rounded-2xl w-fit mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                <BookOpen className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">마크다운 에디터</h3>
-              <p className="text-muted-foreground">
-                직관적인 마크다운 에디터로 
-                손쉽게 아름다운 글을 작성하세요
-              </p>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              <Card className="p-8 text-center border-0 shadow-xl bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-900/20 dark:to-blue-800/20 rounded-2xl group hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+                <motion.div 
+                  className="p-4 bg-blue-600 rounded-2xl w-fit mx-auto mb-6 group-hover:scale-110 transition-transform duration-300"
+                  whileHover={{ rotate: [0, -10, 10, 0], scale: 1.2 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <BookOpen className="h-8 w-8 text-white" />
+                </motion.div>
+                <h3 className="text-xl font-semibold mb-3">마크다운 에디터</h3>
+                <p className="text-muted-foreground">
+                  직관적인 마크다운 에디터로 
+                  손쉽게 아름다운 글을 작성하세요
+                </p>
+              </Card>
+            </motion.div>
             
-            <Card className="p-8 text-center border-0 shadow-xl bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-900/20 dark:to-purple-800/20 rounded-2xl group hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-              <div className="p-4 bg-purple-600 rounded-2xl w-fit mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                <TrendingUp className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">실시간 분석</h3>
-              <p className="text-muted-foreground">
-                조회수, 좋아요, 댓글 등
-                실시간으로 통계를 확인하세요
-              </p>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <Card className="p-8 text-center border-0 shadow-xl bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-900/20 dark:to-purple-800/20 rounded-2xl group hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+                <motion.div 
+                  className="p-4 bg-purple-600 rounded-2xl w-fit mx-auto mb-6 group-hover:scale-110 transition-transform duration-300"
+                  whileHover={{ y: [-2, -8, -2], transition: { duration: 0.5 } }}
+                >
+                  <TrendingUp className="h-8 w-8 text-white" />
+                </motion.div>
+                <h3 className="text-xl font-semibold mb-3">실시간 분석</h3>
+                <p className="text-muted-foreground">
+                  조회수, 좋아요, 댓글 등
+                  실시간으로 통계를 확인하세요
+                </p>
+              </Card>
+            </motion.div>
             
-            <Card className="p-8 text-center border-0 shadow-xl bg-gradient-to-br from-pink-50 to-pink-100/50 dark:from-pink-900/20 dark:to-pink-800/20 rounded-2xl group hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-              <div className="p-4 bg-pink-600 rounded-2xl w-fit mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                <Users className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">소셜 기능</h3>
-              <p className="text-muted-foreground">
-                댓글, 좋아요, 공유 기능으로
-                독자와 소통하세요
-              </p>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <Card className="p-8 text-center border-0 shadow-xl bg-gradient-to-br from-pink-50 to-pink-100/50 dark:from-pink-900/20 dark:to-pink-800/20 rounded-2xl group hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+                <motion.div 
+                  className="p-4 bg-pink-600 rounded-2xl w-fit mx-auto mb-6 group-hover:scale-110 transition-transform duration-300"
+                  whileHover={{ 
+                    scale: [1, 1.1, 1.2, 1.1, 1],
+                    rotate: [0, -5, 5, -5, 0]
+                  }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <Users className="h-8 w-8 text-white" />
+                </motion.div>
+                <h3 className="text-xl font-semibold mb-3">소셜 기능</h3>
+                <p className="text-muted-foreground">
+                  댓글, 좋아요, 공유 기능으로
+                  독자와 소통하세요
+                </p>
+              </Card>
+            </motion.div>
           </div>
         </div>
       </section>

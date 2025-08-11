@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -52,7 +53,12 @@ export default function LoginPage() {
         </div>
 
         {/* Login Form */}
-        <Card className="border-0 shadow-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+        <motion.div
+          initial={{ opacity: 0, y: 30, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <Card className="border-0 shadow-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl" glassy>
           <CardHeader className="space-y-1 pb-8">
             <CardTitle className="text-2xl font-semibold text-center">로그인</CardTitle>
             <CardDescription className="text-center">
@@ -169,7 +175,8 @@ export default function LoginPage() {
               </div>
             </CardFooter>
           </form>
-        </Card>
+          </Card>
+        </motion.div>
 
         {/* Footer */}
         <div className="text-center">

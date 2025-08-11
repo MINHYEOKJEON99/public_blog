@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, AlertCircle, Info, X, XCircle } from 'lucide-react'
 import { useUIStore } from '@/stores/uiStore'
 import { cn } from '@/lib/utils'
@@ -13,24 +14,49 @@ const toastIcons = {
 }
 
 const toastStyles = {
-  success: 'bg-green-50 border-green-200 text-green-800 dark:bg-green-900/20 dark:border-green-800 dark:text-green-300',
-  error: 'bg-red-50 border-red-200 text-red-800 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300',
-  warning: 'bg-yellow-50 border-yellow-200 text-yellow-800 dark:bg-yellow-900/20 dark:border-yellow-800 dark:text-yellow-300',
-  info: 'bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-300',
+  success: 'glass bg-green-50/80 dark:bg-green-900/40 border-green-200/50 dark:border-green-800/50 text-green-800 dark:text-green-300 shadow-lg shadow-green-500/20',
+  error: 'glass bg-red-50/80 dark:bg-red-900/40 border-red-200/50 dark:border-red-800/50 text-red-800 dark:text-red-300 shadow-lg shadow-red-500/20',
+  warning: 'glass bg-yellow-50/80 dark:bg-yellow-900/40 border-yellow-200/50 dark:border-yellow-800/50 text-yellow-800 dark:text-yellow-300 shadow-lg shadow-yellow-500/20',
+  info: 'glass bg-blue-50/80 dark:bg-blue-900/40 border-blue-200/50 dark:border-blue-800/50 text-blue-800 dark:text-blue-300 shadow-lg shadow-blue-500/20',
 }
 
 export function ToastProvider() {
   const { toasts, removeToast } = useUIStore()
 
   return (
-    <div className="fixed top-4 right-4 z-[100] space-y-2 pointer-events-none">
-      {toasts.map((toast) => (
-        <Toast
-          key={toast.id}
-          toast={toast}
-          onClose={() => removeToast(toast.id)}
-        />
-      ))}
+    <div className="fixed top-4 right-4 z-[100] pointer-events-none">
+      <AnimatePresence mode="popLayout">
+        {toasts.map((toast, index) => (
+          <motion.div
+            key={toast.id}
+            layout
+            initial={{ opacity: 0, x: 400, scale: 0.8 }}
+            animate={{ 
+              opacity: 1, 
+              x: 0, 
+              scale: 1,
+              y: index * 80
+            }}
+            exit={{ 
+              opacity: 0, 
+              x: 400, 
+              scale: 0.8,
+              transition: { duration: 0.2 }
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 30,
+            }}
+            className="absolute top-0 right-0"
+          >
+            <Toast
+              toast={toast}
+              onClose={() => removeToast(toast.id)}
+            />
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   )
 }
@@ -47,67 +73,89 @@ interface ToastProps {
 }
 
 function Toast({ toast, onClose }: ToastProps) {
-  const [isVisible, setIsVisible] = useState(false)
-  const [isLeaving, setIsLeaving] = useState(false)
-  
   const Icon = toastIcons[toast.type]
   
   useEffect(() => {
-    // Show animation
-    const showTimer = setTimeout(() => setIsVisible(true), 50)
-    
     // Auto dismiss
     const duration = toast.duration || 5000
     const dismissTimer = setTimeout(() => {
-      handleClose()
+      onClose()
     }, duration)
 
     return () => {
-      clearTimeout(showTimer)
       clearTimeout(dismissTimer)
     }
-  }, [toast.duration])
-
-  const handleClose = () => {
-    setIsLeaving(true)
-    setTimeout(() => {
-      onClose()
-    }, 300)
-  }
+  }, [toast.duration, onClose])
 
   return (
-    <div
-      className={cn(
-        'pointer-events-auto w-full max-w-sm transform transition-all duration-300 ease-out',
-        {
-          'translate-x-full opacity-0': !isVisible,
-          'translate-x-0 opacity-100': isVisible && !isLeaving,
-          'translate-x-full opacity-0': isLeaving,
-        }
-      )}
+    <motion.div
+      className="pointer-events-auto w-full max-w-sm"
+      whileHover={{ scale: 1.02, y: -2 }}
+      whileTap={{ scale: 0.98 }}
     >
-      <div
+      <motion.div
         className={cn(
-          'rounded-xl border p-4 shadow-lg backdrop-blur-sm',
+          'rounded-2xl border-2 p-4 backdrop-blur-xl',
           toastStyles[toast.type]
         )}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.1 }}
       >
         <div className="flex items-start gap-3">
-          <Icon className="h-5 w-5 flex-shrink-0 mt-0.5" />
-          <div className="flex-1 min-w-0">
-            <p className="font-medium text-sm">{toast.title}</p>
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ 
+              type: "spring", 
+              stiffness: 500, 
+              damping: 15, 
+              delay: 0.2 
+            }}
+          >
+            <Icon className="h-5 w-5 flex-shrink-0 mt-0.5" />
+          </motion.div>
+          
+          <motion.div 
+            className="flex-1 min-w-0"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <p className="font-semibold text-sm">{toast.title}</p>
             {toast.message && (
-              <p className="text-sm opacity-90 mt-1">{toast.message}</p>
+              <motion.p 
+                className="text-sm opacity-90 mt-1"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.9 }}
+                transition={{ delay: 0.4 }}
+              >
+                {toast.message}
+              </motion.p>
             )}
-          </div>
-          <button
-            onClick={handleClose}
-            className="flex-shrink-0 rounded-md p-1.5 hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+          </motion.div>
+          
+          <motion.button
+            onClick={onClose}
+            className="flex-shrink-0 rounded-full p-1.5 hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+            whileHover={{ scale: 1.1, rotate: 90 }}
+            whileTap={{ scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5, type: "spring", stiffness: 400 }}
           >
             <X className="h-4 w-4" />
-          </button>
+          </motion.button>
         </div>
-      </div>
-    </div>
+        
+        {/* Progress bar */}
+        <motion.div
+          className="absolute bottom-0 left-0 h-1 bg-current opacity-30 rounded-b-2xl"
+          initial={{ width: "100%" }}
+          animate={{ width: "0%" }}
+          transition={{ duration: (toast.duration || 5000) / 1000, ease: "linear" }}
+        />
+      </motion.div>
+    </motion.div>
   )
 }
