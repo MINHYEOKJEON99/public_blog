@@ -23,11 +23,11 @@ const SelectTrigger = React.forwardRef<
   const getVariantStyles = () => {
     switch (variant) {
       case 'glass':
-        return 'glass border-white/20 dark:border-gray-700/30 bg-white/10 dark:bg-gray-800/20 backdrop-blur-xl hover:bg-white/20 dark:hover:bg-gray-700/30'
+        return 'border border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm hover:bg-gray-50 dark:hover:bg-gray-700'
       case 'modern':
-        return 'bg-gradient-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-700 border-2 border-gray-200 dark:border-gray-600 shadow-lg hover:shadow-xl'
+        return 'bg-gray-50 dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 shadow-md hover:shadow-lg'
       default:
-        return 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700'
+        return 'border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700'
     }
   }
 

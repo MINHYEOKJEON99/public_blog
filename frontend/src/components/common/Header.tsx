@@ -87,8 +87,8 @@ export function Header() {
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
         scrolled 
-          ? "glass shadow-lg border-b border-white/10" 
-          : "bg-transparent border-b border-white/5"
+          ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg border-b border-gray-200 dark:border-gray-700" 
+          : "bg-transparent border-b border-gray-200/20 dark:border-gray-700/20"
       )}
       variants={headerVariants}
       initial="initial"
@@ -102,10 +102,10 @@ export function Header() {
             whileHover="hover"
           >
             <Link href="/" className="flex items-center space-x-2 group">
-              <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                <Sparkles className="h-5 w-5 text-white animate-pulse-soft" />
+              <div className="p-2 bg-blue-600 rounded-lg shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                <Sparkles className="h-5 w-5 text-white animate-pulse" />
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
                 Public Blog
               </span>
             </Link>
@@ -131,7 +131,7 @@ export function Header() {
                 >
                   {item.label}
                   <motion.div
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 rounded-full"
                     initial={{ scaleX: 0 }}
                     whileHover={{ scaleX: 1 }}
                     transition={{ duration: 0.2 }}
@@ -198,7 +198,7 @@ export function Header() {
 
             {/* Dashboard Button */}
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button variant="glass" size="sm" asChild>
+              <Button variant="outline" size="sm" asChild>
                 <Link href="/dashboard" className="gap-2">
                   <User className="h-4 w-4" />
                   대시보드
@@ -208,7 +208,7 @@ export function Header() {
 
             {/* Write Button */}
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button size="sm" variant="gradient" asChild>
+              <Button size="sm" variant="default" asChild>
                 <Link href="/dashboard/posts/new">글쓰기</Link>
               </Button>
             </motion.div>
@@ -263,7 +263,7 @@ export function Header() {
               animate="open"
               exit="closed"
             >
-              <div className="py-4 space-y-4 glass rounded-2xl mt-4 p-6 border border-white/10">
+              <div className="py-4 space-y-4 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm rounded-2xl mt-4 p-6 border border-gray-200 dark:border-gray-700">
                 <motion.nav className="flex flex-col space-y-2">
                   {navItems.map((item, index) => (
                     <motion.div
@@ -303,13 +303,13 @@ export function Header() {
                   </div>
                   
                   <div className="flex space-x-2">
-                    <Button variant="glass" size="sm" className="flex-1" asChild>
+                    <Button variant="outline" size="sm" className="flex-1" asChild>
                       <Link href="/dashboard" onClick={() => setIsMenuOpen(false)}>
                         <User className="h-4 w-4 mr-2" />
                         대시보드
                       </Link>
                     </Button>
-                    <Button size="sm" variant="gradient" className="flex-1" asChild>
+                    <Button size="sm" variant="default" className="flex-1" asChild>
                       <Link href="/dashboard/posts/new" onClick={() => setIsMenuOpen(false)}>
                         글쓰기
                       </Link>

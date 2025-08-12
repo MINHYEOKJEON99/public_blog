@@ -29,11 +29,11 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       <motion.div
         ref={ref}
         className={cn(
-          'rounded-2xl border shadow-lg transition-all duration-300',
+          'rounded-xl border shadow-lg transition-all duration-300',
           glassy 
-            ? 'glass bg-white/70 dark:bg-gray-900/70 border-white/20 dark:border-gray-700/50' 
-            : 'bg-card text-card-foreground border-gray-200/50 dark:border-gray-700/50',
-          hoverable && 'cursor-pointer hover:shadow-xl hover:shadow-blue-500/10',
+            ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-gray-200 dark:border-gray-700' 
+            : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-200 dark:border-gray-700',
+          hoverable && 'cursor-pointer hover:shadow-xl',
           className
         )}
         variants={cardVariants}
@@ -79,7 +79,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn('text-sm text-muted-foreground leading-relaxed', className)}
+    className={cn('text-sm text-gray-600 dark:text-gray-400 leading-relaxed', className)}
     {...props}
   />
 ))
@@ -142,8 +142,8 @@ const GlassCard = React.forwardRef<HTMLDivElement, CardProps>(
       glassy
       hoverable
       className={cn(
-        'backdrop-blur-xl border-white/20 dark:border-gray-700/30 shadow-2xl',
-        'bg-gradient-to-br from-white/80 to-white/50 dark:from-gray-900/80 dark:to-gray-800/50',
+        'backdrop-blur-md border-gray-200 dark:border-gray-700 shadow-2xl',
+        'bg-white/80 dark:bg-gray-900/80',
         className
       )}
       {...props}

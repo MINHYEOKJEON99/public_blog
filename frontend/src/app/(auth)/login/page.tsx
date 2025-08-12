@@ -56,7 +56,7 @@ export default function LoginPage() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <Card className="border-0 shadow-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl" glassy>
+          <Card className="border-0 shadow-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl">
           <CardHeader className="space-y-1 pb-8">
             <CardTitle className="text-2xl font-semibold text-center">로그인</CardTitle>
             <CardDescription className="text-center">

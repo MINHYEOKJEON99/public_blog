@@ -42,11 +42,11 @@ const ModalContent = React.forwardRef<
   const getVariantStyles = () => {
     switch (variant) {
       case 'glass':
-        return 'glass bg-white/80 dark:bg-gray-900/80 border border-white/20 dark:border-gray-700/30 backdrop-blur-xl shadow-2xl'
+        return 'bg-white/80 dark:bg-gray-900/80 border border-gray-200 dark:border-gray-700 backdrop-blur-sm shadow-2xl'
       case 'modern':
-        return 'bg-gradient-to-br from-white via-gray-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 border-2 border-gray-200 dark:border-gray-600 shadow-2xl'
+        return 'bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 shadow-2xl'
       default:
-        return 'bg-background border shadow-2xl'
+        return 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-2xl'
     }
   }
 
