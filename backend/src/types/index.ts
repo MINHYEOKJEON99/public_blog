@@ -1,5 +1,9 @@
 import { Request } from 'express'
-import { User, Role } from '@prisma/client'
+import { User } from '@prisma/client'
+
+// SQLite compatibility types
+export type Role = 'USER' | 'ADMIN'
+export type PostStatus = 'DRAFT' | 'PUBLISHED'
 
 // Extend Express Request type
 export interface AuthenticatedRequest extends Request {
@@ -52,7 +56,7 @@ export interface UserResponse {
   name?: string
   bio?: string
   avatar?: string
-  role: Role
+  role: string
   verified: boolean
   createdAt: Date
   updatedAt: Date
@@ -257,7 +261,7 @@ export interface CommentQueryParams extends BaseQueryParams {
 export interface JwtPayload {
   userId: string
   email: string
-  role: Role
+  role: string
 }
 
 // Error Types

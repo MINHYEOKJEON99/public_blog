@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
-import { Role } from '@prisma/client'
 import { JWTService } from '@/utils/jwt'
 import { db } from '@/utils/database'
-import { AuthenticatedRequest, ApiResponse } from '@/types'
+import { AuthenticatedRequest, ApiResponse, Role } from '@/types'
 
 /**
  * Middleware to authenticate requests using JWT tokens
@@ -93,7 +92,7 @@ export const authenticate = async (
 /**
  * Middleware to authorize requests based on user roles
  */
-export const authorize = (...roles: Role[]) => {
+export const authorize = (...roles: string[]) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
     if (!req.user) {
       res.status(401).json({
@@ -118,7 +117,7 @@ export const authorize = (...roles: Role[]) => {
 /**
  * Middleware for admin-only routes
  */
-export const requireAdmin = authorize(Role.ADMIN)
+export const requireAdmin = authorize('ADMIN')
 
 /**
  * Export authenticate as auth for consistency with route imports
@@ -188,7 +187,7 @@ export const requireOwnershipOrAdmin = (resourceUserIdField: string = 'authorId'
     }
 
     // Admin can access any resource
-    if (req.user.role === Role.ADMIN) {
+    if (req.user.role === 'ADMIN') {
       next()
       return
     }

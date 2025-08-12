@@ -1,9 +1,9 @@
 import multer from 'multer'
 import path from 'path'
 import fs from 'fs'
-import { Request } from 'express'
+import rateLimit from 'express-rate-limit'
+import { Request, Response, NextFunction } from 'express'
 import config from '@/utils/config'
-import { AppError } from './error'
 
 // Ensure upload directory exists
 const uploadDir = path.join(process.cwd(), config.UPLOAD_DIR)
@@ -13,7 +13,7 @@ if (!fs.existsSync(uploadDir)) {
 
 // Create subdirectories
 const createSubDirs = () => {
-  const dirs = ['avatars', 'posts', 'covers']
+  const dirs = ['avatars', 'posts', 'covers', 'general']
   dirs.forEach(dir => {
     const dirPath = path.join(uploadDir, dir)
     if (!fs.existsSync(dirPath)) {
@@ -29,13 +29,13 @@ createSubDirs()
  */
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    let subDir = 'posts' // default
+    let subDir = 'general'
     
-    if (req.route?.path.includes('avatar')) {
+    if (req.path.includes('avatar')) {
       subDir = 'avatars'
-    } else if (req.route?.path.includes('cover')) {
+    } else if (req.path.includes('cover')) {
       subDir = 'covers'
-    } else if (req.route?.path.includes('image')) {
+    } else if (req.path.includes('image') || req.path.includes('post')) {
       subDir = 'posts'
     }
     
@@ -43,267 +43,115 @@ const storage = multer.diskStorage({
     cb(null, destinationPath)
   },
   filename: (req, file, cb) => {
-    // Generate unique filename
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
     const extension = path.extname(file.originalname)
     const baseName = path.basename(file.originalname, extension)
     const sanitizedBaseName = baseName.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 50)
     
     cb(null, `${sanitizedBaseName}_${uniqueSuffix}${extension}`)
-  },
+  }
 })
 
 /**
- * File filter function
+ * File filter
  */
 const fileFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-  const allowedTypes = config.ALLOWED_FILE_TYPES.split(',').map(type => type.trim())
-  const fileExtension = path.extname(file.originalname).substring(1).toLowerCase()
+  const allowedTypes = config.ALLOWED_FILE_TYPES.split(',')
+  const fileExtension = path.extname(file.originalname).toLowerCase().slice(1)
   
-  // Check file extension
-  if (!allowedTypes.includes(fileExtension)) {
-    return cb(new AppError(
-      `File type not supported. Allowed types: ${allowedTypes.join(', ')}`, 
-      400
-    ))
+  if (allowedTypes.includes(fileExtension)) {
+    cb(null, true)
+  } else {
+    cb(new Error(`File type .${fileExtension} is not allowed. Allowed types: ${allowedTypes.join(', ')}`))
   }
-  
-  // Check MIME type for additional security
-  const allowedMimeTypes = [
-    'image/jpeg',
-    'image/jpg', 
-    'image/png',
-    'image/gif',
-    'image/webp',
-  ]
-  
-  if (!allowedMimeTypes.includes(file.mimetype)) {
-    return cb(new AppError(
-      'Invalid file format. Only image files are allowed',
-      400
-    ))
-  }
-  
-  cb(null, true)
 }
 
 /**
- * Base upload configuration
+ * Base multer configuration
  */
-const baseUploadConfig: multer.Options = {
+const upload = multer({
   storage,
   fileFilter,
   limits: {
     fileSize: config.MAX_FILE_SIZE,
-    files: 1, // Single file by default
-  },
-}
+    files: 10
+  }
+})
 
 /**
- * Single file upload middleware
+ * Upload middleware functions
  */
-export const uploadSingle = (fieldName: string = 'file') => {
-  return multer({
-    ...baseUploadConfig,
-  }).single(fieldName)
-}
+export const uploadSingle = (fieldName: string = 'file') => upload.single(fieldName)
+export const uploadMultiple = (fieldName: string = 'files', maxCount: number = 10) => upload.array(fieldName, maxCount)
+export const uploadAvatar = upload.single('avatar')
+export const uploadPostImage = upload.single('image')
+export const uploadCoverImage = upload.single('cover')
 
 /**
- * Multiple files upload middleware
+ * Rate limiting for uploads
  */
-export const uploadMultiple = (fieldName: string = 'files', maxCount: number = 5) => {
-  return multer({
-    ...baseUploadConfig,
-    limits: {
-      ...baseUploadConfig.limits,
-      files: maxCount,
-    },
-  }).array(fieldName, maxCount)
-}
-
-/**
- * Avatar upload middleware
- */
-export const uploadAvatar = multer({
-  ...baseUploadConfig,
-  limits: {
-    fileSize: 2 * 1024 * 1024, // 2MB for avatars
-    files: 1,
+export const uploadRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // limit each IP to 20 uploads per windowMs
+  message: {
+    success: false,
+    message: 'Too many upload attempts, please try again later'
   },
-  fileFilter: (req, file, cb) => {
-    // More restrictive for avatars
-    const allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
-    
-    if (!allowedMimeTypes.includes(file.mimetype)) {
-      return cb(new AppError(
-        'Avatar must be a JPEG, PNG, or WebP image',
-        400
-      ))
-    }
-    
-    cb(null, true)
-  },
-}).single('avatar')
-
-/**
- * Post image upload middleware
- */
-export const uploadPostImage = multer({
-  ...baseUploadConfig,
-  limits: {
-    fileSize: config.MAX_FILE_SIZE,
-    files: 1,
-  },
-}).single('image')
-
-/**
- * Cover image upload middleware
- */
-export const uploadCoverImage = multer({
-  ...baseUploadConfig,
-  limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB for cover images
-    files: 1,
-  },
-}).single('cover')
+  standardHeaders: true,
+  legacyHeaders: false
+})
 
 /**
  * Get file URL helper
  */
-export const getFileUrl = (filename: string, subDir: string = 'posts'): string => {
+export const getFileUrl = (filename: string, subDir: string = 'general'): string => {
   return `/uploads/${subDir}/${filename}`
 }
 
 /**
  * Delete file helper
  */
-export const deleteFile = async (filePath: string): Promise<void> => {
-  try {
-    const fullPath = path.join(process.cwd(), 'uploads', filePath)
-    if (fs.existsSync(fullPath)) {
-      await fs.promises.unlink(fullPath)
-    }
-  } catch (error) {
-    console.error('Error deleting file:', error)
-  }
-}
-
-/**
- * Get file stats helper
- */
-export const getFileStats = (filePath: string): {
-  exists: boolean
-  size?: number
-  createdAt?: Date
-  modifiedAt?: Date
-} => {
-  try {
-    const fullPath = path.join(process.cwd(), 'uploads', filePath)
+export const deleteFile = (filepath: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const fullPath = path.join(uploadDir, filepath)
     
-    if (!fs.existsSync(fullPath)) {
-      return { exists: false }
-    }
-    
-    const stats = fs.statSync(fullPath)
-    return {
-      exists: true,
-      size: stats.size,
-      createdAt: stats.birthtime,
-      modifiedAt: stats.mtime,
-    }
-  } catch (error) {
-    return { exists: false }
-  }
-}
-
-/**
- * Clean up old files (for maintenance)
- */
-export const cleanupOldFiles = async (maxAge: number = 30 * 24 * 60 * 60 * 1000): Promise<void> => {
-  const now = Date.now()
-  const dirs = ['avatars', 'posts', 'covers']
-  
-  for (const dir of dirs) {
-    const dirPath = path.join(uploadDir, dir)
-    
-    try {
-      if (!fs.existsSync(dirPath)) continue
-      
-      const files = await fs.promises.readdir(dirPath)
-      
-      for (const file of files) {
-        const filePath = path.join(dirPath, file)
-        const stats = await fs.promises.stat(filePath)
-        
-        if (now - stats.mtime.getTime() > maxAge) {
-          await fs.promises.unlink(filePath)
-          console.log(`Cleaned up old file: ${file}`)
-        }
+    fs.unlink(fullPath, (err) => {
+      if (err && err.code !== 'ENOENT') {
+        reject(err)
+      } else {
+        resolve()
       }
-    } catch (error) {
-      console.error(`Error cleaning up directory ${dir}:`, error)
-    }
-  }
-}
-
-/**
- * Validate file type by content (additional security)
- */
-export const validateFileContent = async (filePath: string): Promise<boolean> => {
-  try {
-    const buffer = await fs.promises.readFile(filePath)
-    
-    // Check for common image file signatures
-    const signatures = {
-      jpeg: [0xFF, 0xD8, 0xFF],
-      png: [0x89, 0x50, 0x4E, 0x47],
-      gif: [0x47, 0x49, 0x46],
-      webp: [0x52, 0x49, 0x46, 0x46], // RIFF (first 4 bytes of WebP)
-    }
-    
-    for (const [type, signature] of Object.entries(signatures)) {
-      if (signature.every((byte, index) => buffer[index] === byte)) {
-        return true
-      }
-    }
-    
-    return false
-  } catch (error) {
-    return false
-  }
-}
-
-/**
- * Create thumbnail (placeholder - would need image processing library)
- */
-export const createThumbnail = async (
-  sourcePath: string, 
-  thumbnailPath: string, 
-  width: number = 300, 
-  height: number = 300
-): Promise<void> => {
-  // This is a placeholder function
-  // In production, you would use libraries like Sharp or Jimp
-  console.log(`Would create thumbnail: ${sourcePath} -> ${thumbnailPath} (${width}x${height})`)
-}
-
-/**
- * Get upload progress middleware (for large file uploads)
- */
-export const uploadProgress = (req: Request & { uploadProgress?: number }, res: any, next: any) => {
-  let totalSize = 0
-  let receivedSize = 0
-  
-  req.on('data', (chunk) => {
-    receivedSize += chunk.length
-    if (totalSize > 0) {
-      req.uploadProgress = Math.round((receivedSize / totalSize) * 100)
-    }
+    })
   })
-  
-  const contentLength = req.headers['content-length']
-  if (contentLength) {
-    totalSize = parseInt(contentLength, 10)
+}
+
+/**
+ * Get file stats
+ */
+export const getFileStats = (filepath: string): Promise<fs.Stats | null> => {
+  return new Promise((resolve) => {
+    const fullPath = path.join(uploadDir, filepath)
+    
+    fs.stat(fullPath, (err, stats) => {
+      if (err) {
+        resolve(null)
+      } else {
+        resolve(stats)
+      }
+    })
+  })
+}
+
+/**
+ * Validate file content
+ */
+export const validateFileContent = (req: Request, res: Response, next: NextFunction): void => {
+  if (!req.file && !req.files) {
+    res.status(400).json({
+      success: false,
+      message: 'No file uploaded'
+    })
+    return
   }
   
   next()
